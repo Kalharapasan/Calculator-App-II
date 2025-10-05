@@ -73,13 +73,13 @@ Calculator app II/
 ## 🧑‍💻 Author
 
 **Your Name**  
-📧 [your.email@example.com]  
-🌐 [GitHub Profile Link]
+📧 [kalharap84@gmail.com]  
+🌐 [https://github.com/Kalharapasan]
 
 ---
 
 ## 📜 License
 
-This project is licensed under the **MIT License** — feel free to use and modify it for learning and development purposes.
+This project is licensed under the [License](./LICENSE.md): Proprietary  — feel free to use and modify it for learning and development purposes.
 
 ---
