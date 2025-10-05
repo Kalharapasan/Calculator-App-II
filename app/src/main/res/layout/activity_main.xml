@@ -7,33 +7,6 @@
     android:background="@drawable/main_background"
     android:padding="16dp">
 
-    <!-- Top Menu Bar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="end"
-        android:layout_marginBottom="8dp">
-
-        <ImageButton
-            android:id="@+id/btnHistory"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/menu_button_background"
-            android:src="@drawable/ic_history"
-            android:contentDescription="History"
-            android:layout_marginEnd="8dp" />
-
-        <ImageButton
-            android:id="@+id/btnSettings"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/menu_button_background"
-            android:src="@drawable/ic_settings"
-            android:contentDescription="Settings" />
-    </LinearLayout>
-
-    <!-- Display Container -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -41,7 +14,7 @@
         android:layout_marginBottom="16dp"
         android:elevation="8dp"
         app:cardCornerRadius="16dp"
-        app:cardBackgroundColor="@color/display_background">
+        app:cardBackgroundColor="#FFFFFF">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,58 +22,19 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Memory & Mode Indicators -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="8dp">
-
-                <TextView
-                    android:id="@+id/tvMemoryIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@color/calculator_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    android:background="@drawable/memory_indicator_background"
-                    android:paddingHorizontal="8dp"
-                    android:paddingVertical="4dp" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/tvModeIndicator"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="DEG"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-            <!-- Secondary Display -->
             <TextView
-                android:id="@+id/tvSecondaryDisplay"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.8"
-                android:gravity="end|center_vertical"
+                android:id="@+id/tvMemoryIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text=""
-                android:textColor="@color/text_secondary"
+                android:textColor="@color/calculator_primary"
                 android:textSize="14sp"
-                android:fontFamily="monospace"
-                android:maxLines="1"
-                android:ellipsize="start"
-                android:alpha="0.7" />
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:background="@drawable/memory_indicator_background"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp" />
 
-            <!-- History Display -->
             <TextView
                 android:id="@+id/tvHistory"
                 android:layout_width="match_parent"
@@ -108,29 +42,30 @@
                 android:layout_weight="1"
                 android:gravity="end|center_vertical"
                 android:text=""
-                android:textColor="@color/text_secondary"
+                android:textColor="#757575"
                 android:textSize="18sp"
                 android:fontFamily="monospace"
                 android:maxLines="2"
-                android:ellipsize="end" />
+                android:ellipsize="end"
+                android:layout_marginTop="8dp" />
 
-            <!-- Main Display -->
             <TextView
                 android:id="@+id/tvDisplay"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
                 android:gravity="end|center_vertical"
+                android:singleLine="true"
                 android:text="0"
-                android:textColor="@color/text_primary"
+                android:textColor="#212121"
                 android:textSize="48sp"
                 android:fontFamily="monospace"
-                android:maxLines="1"
                 android:ellipsize="start" />
+
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
 
-    <!-- Button Grid -->
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -138,7 +73,7 @@
         android:columnCount="4"
         android:rowCount="8">
 
-        <!-- Row 1: Memory Functions -->
+        <!-- Row 1 -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -147,14 +82,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_memory">
-            <Button
-                android:id="@+id/btnMC"
+            app:cardBackgroundColor="#E8F5E8">
+            <Button android:id="@+id/btnMC"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="MC"
-                android:textColor="@color/text_memory"
+                android:textColor="#388E3C"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -167,14 +101,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_memory">
-            <Button
-                android:id="@+id/btnMR"
+            app:cardBackgroundColor="#E8F5E8">
+            <Button android:id="@+id/btnMR"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="MR"
-                android:textColor="@color/text_memory"
+                android:textColor="#388E3C"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -187,14 +120,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_memory">
-            <Button
-                android:id="@+id/btnMPlus"
+            app:cardBackgroundColor="#E8F5E8">
+            <Button android:id="@+id/btnMPlus"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="M+"
-                android:textColor="@color/text_memory"
+                android:textColor="#388E3C"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -207,19 +139,18 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_memory">
-            <Button
-                android:id="@+id/btnMMinus"
+            app:cardBackgroundColor="#E8F5E8">
+            <Button android:id="@+id/btnMMinus"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="M-"
-                android:textColor="@color/text_memory"
+                android:textColor="#388E3C"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Row 2: MS, M~, %, CE -->
+        <!-- Row 2 -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -228,14 +159,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_memory">
-            <Button
-                android:id="@+id/btnMS"
+            app:cardBackgroundColor="#E8F5E8">
+            <Button android:id="@+id/btnMS"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="MS"
-                android:textColor="@color/text_memory"
+                android:textColor="#388E3C"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -248,14 +178,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_memory">
-            <Button
-                android:id="@+id/btnMTilde"
+            app:cardBackgroundColor="#E8F5E8">
+            <Button android:id="@+id/btnMTilde"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="M~"
-                android:textColor="@color/text_memory"
+                android:textColor="#388E3C"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -268,14 +197,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_function">
-            <Button
-                android:id="@+id/btnPercent"
+            app:cardBackgroundColor="#F3E5F5">
+            <Button android:id="@+id/btnPercent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="%"
-                android:textColor="@color/text_function"
+                android:textColor="#7B1FA2"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -288,19 +216,18 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_function">
-            <Button
-                android:id="@+id/btnCE"
+            app:cardBackgroundColor="#F3E5F5">
+            <Button android:id="@+id/btnCE"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="CE"
-                android:textColor="@color/text_function"
+                android:textColor="#7B1FA2"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Row 3: Advanced Functions -->
+        <!-- Row 3 -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -309,14 +236,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_function">
-            <Button
-                android:id="@+id/btnOneOverX"
+            app:cardBackgroundColor="#F3E5F5">
+            <Button android:id="@+id/btnOneOverX"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="1/x"
-                android:textColor="@color/text_function"
+                android:textColor="#7B1FA2"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -329,14 +255,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_function">
-            <Button
-                android:id="@+id/btnSquare"
+            app:cardBackgroundColor="#F3E5F5">
+            <Button android:id="@+id/btnSquare"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="x²"
-                android:textColor="@color/text_function"
+                android:textColor="#7B1FA2"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -349,14 +274,13 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_function">
-            <Button
-                android:id="@+id/btnSqrt"
+            app:cardBackgroundColor="#F3E5F5">
+            <Button android:id="@+id/btnSqrt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="√x"
-                android:textColor="@color/text_function"
+                android:textColor="#7B1FA2"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
@@ -369,20 +293,18 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_clear">
-            <Button
-                android:id="@+id/btnC"
+            app:cardBackgroundColor="#FFEBEE">
+            <Button android:id="@+id/btnC"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:text="C"
-                android:textColor="@color/text_clear"
+                android:textColor="#D32F2F"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Rows 4-6: Number buttons 7-9, 4-6, 1-3 with operators -->
-        <!-- Row 4 -->
+        <!-- Row 4: 7, 8, 9, ÷ -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -391,8 +313,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn7" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="7" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="7"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -403,8 +332,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn8" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="8" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="8"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -415,8 +351,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn9" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="9" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="9"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -427,11 +370,18 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_operator">
-            <Button android:id="@+id/btnDivide" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="÷" android:textColor="@color/text_operator" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#E3F2FD">
+            <Button android:id="@+id/btnDivide"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="÷"
+                android:textColor="#1976D2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Row 5 -->
+        <!-- Row 5: 4, 5, 6, × -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -440,8 +390,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn4" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="4" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="4"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -452,8 +409,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn5" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="5" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="5"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -464,8 +428,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn6" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="6" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="6"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -476,11 +447,18 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_operator">
-            <Button android:id="@+id/btnMultiply" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="×" android:textColor="@color/text_operator" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#E3F2FD">
+            <Button android:id="@+id/btnMultiply"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="×"
+                android:textColor="#1976D2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Row 6 -->
+        <!-- Row 6: 1, 2, 3, − -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -489,8 +467,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn1" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="1" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="1"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -501,8 +486,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn2" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="2" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="2"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -513,8 +505,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn3" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="3" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="3"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -525,11 +524,18 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_operator">
-            <Button android:id="@+id/btnMinus" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="−" android:textColor="@color/text_operator" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#E3F2FD">
+            <Button android:id="@+id/btnMinus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="−"
+                android:textColor="#1976D2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
-        <!-- Row 7 -->
+        <!-- Row 7: ±, 0, ., + -->
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -538,8 +544,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_function">
-            <Button android:id="@+id/btnPlusMinus" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="±" android:textColor="@color/text_function" android:textSize="20sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#F3E5F5">
+            <Button android:id="@+id/btnPlusMinus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="±"
+                android:textColor="#7B1FA2"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -550,8 +563,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btn0" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="0" android:textColor="@color/text_number" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btn0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="0"
+                android:textColor="#1A237E"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -562,8 +582,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="6dp"
-            app:cardBackgroundColor="@color/button_number">
-            <Button android:id="@+id/btnDot" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="." android:textColor="@color/text_number" android:textSize="28sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#FFFFFF">
+            <Button android:id="@+id/btnDot"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="."
+                android:textColor="#1A237E"
+                android:textSize="28sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -574,8 +601,15 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/button_operator">
-            <Button android:id="@+id/btnPlus" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/transparent" android:text="+" android:textColor="@color/text_operator" android:textSize="24sp" android:textStyle="bold" />
+            app:cardBackgroundColor="#E3F2FD">
+            <Button android:id="@+id/btnPlus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:text="+"
+                android:textColor="#1976D2"
+                android:textSize="24sp"
+                android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
 
         <!-- Row 8: Equals Button -->
@@ -588,16 +622,17 @@
             android:layout_margin="3dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/button_equals">
-            <Button
-                android:id="@+id/btnEquals"
+            app:cardBackgroundColor="#1976D2">
+            <Button android:id="@+id/btnEquals"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/equals_button_gradient"
                 android:text="="
-                android:textColor="@android:color/white"
+                android:textColor="#FFFFFF"
                 android:textSize="32sp"
                 android:textStyle="bold" />
         </androidx.cardview.widget.CardView>
+
     </GridLayout>
+
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.example.calculatorappii;
 
-
 import android.animation.ObjectAnimator;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -8,27 +7,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.calculator.R;
-
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    // Using the correct button IDs from your activity_main.xml
-    private TextView tvDisplay, tvHistory;
+    private TextView tvDisplay, tvHistory, tvMemoryIndicator;
     private String currentInput = "0";
     private String operator = "";
     private String firstOperand = "";
@@ -37,16 +29,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isResultDisplayed = false;
     private double memoryValue = 0.0;
     private boolean hasMemory = false;
-    private List<String> calculationHistory = new ArrayList<>();
     private String lastOperation = "";
-    private String lastOperandForRepeat = "";
+    private String lastOperand = "";
 
-    // Advanced calculation support
     private MathContext mathContext = new MathContext(15, RoundingMode.HALF_UP);
-    private DecimalFormat displayFormatter = new DecimalFormat("#,###.##########");
     private DecimalFormat scientificFormatter = new DecimalFormat("0.#####E0");
-
-    // Preferences for settings
     private SharedPreferences preferences;
     private Vibrator vibrator;
 
@@ -55,125 +42,69 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize views
         tvDisplay = findViewById(R.id.tvDisplay);
         tvHistory = findViewById(R.id.tvHistory);
-        // The other TextViews (tvMemoryIndicator, tvSecondaryDisplay) were not in the final XML
+        tvMemoryIndicator = findViewById(R.id.tvMemoryIndicator);
 
-        // Initialize preferences and vibrator
         preferences = getSharedPreferences("CalculatorPrefs", MODE_PRIVATE);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-        // Load saved memory value
         memoryValue = Double.longBitsToDouble(preferences.getLong("memory_value", 0));
         hasMemory = preferences.getBoolean("has_memory", false);
 
-        // Initialize all buttons and set click listeners
         initializeButtons();
         updateDisplay();
-
-        // Add long click listeners for advanced features
+        updateMemoryIndicator();
         addLongClickListeners();
     }
 
     private void initializeButtons() {
-        // Number buttons
-        setButtonListener(R.id.btn0);
-        setButtonListener(R.id.btn1);
-        setButtonListener(R.id.btn2);
-        setButtonListener(R.id.btn3);
-        setButtonListener(R.id.btn4);
-        setButtonListener(R.id.btn5);
-        setButtonListener(R.id.btn6);
-        setButtonListener(R.id.btn7);
-        setButtonListener(R.id.btn8);
-        setButtonListener(R.id.btn9);
+        int[] buttonIds = {
+                R.id.btn0, R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4,
+                R.id.btn5, R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9,
+                R.id.btnPlus, R.id.btnMinus, R.id.btnMultiply, R.id.btnDivide,
+                R.id.btnEquals, R.id.btnC, R.id.btnCE, R.id.btnDot,
+                R.id.btnPlusMinus, R.id.btnPercent, R.id.btnSquare,
+                R.id.btnSqrt, R.id.btnOneOverX, R.id.btnMC, R.id.btnMR,
+                R.id.btnMPlus, R.id.btnMMinus, R.id.btnMS, R.id.btnMTilde
+        };
 
-        // Operation buttons
-        setButtonListener(R.id.btnPlus);
-        setButtonListener(R.id.btnMinus);
-        setButtonListener(R.id.btnMultiply);
-        setButtonListener(R.id.btnDivide);
-        setButtonListener(R.id.btnEquals);
-
-        // 2. Using correct button IDs from your layout file
-        setButtonListener(R.id.btnAC); // Changed from btnC
-        setButtonListener(R.id.btnDot);
-        setButtonListener(R.id.btnPlusMinus);
-        setButtonListener(R.id.btnPercent);
-
-        // The following buttons were removed as they don't exist in the layout:
-        // btnCE, btnSquare, btnSqrt, btnOneOverX, btnMC, btnMR, btnMPlus, btnMMinus, btnMS, btnMTilde
-    }
-
-    private void setButtonListener(int id) {
-        View view = findViewById(id);
-        if (view != null) {
-            view.setOnClickListener(this);
+        for (int id : buttonIds) {
+            findViewById(id).setOnClickListener(this);
         }
     }
 
     private void addLongClickListeners() {
-        // Long press C for advanced clear (clear history)
-        View btnAC = findViewById(R.id.btnAC);
-        if (btnAC != null) {
-            btnAC.setOnLongClickListener(v -> {
-                clearAll();
-                calculationHistory.clear();
-                tvHistory.setText("");
-                performHapticFeedback();
-                Toast.makeText(MainActivity.this, "History Cleared", Toast.LENGTH_SHORT).show();
-                return true;
-            });
-        }
+        findViewById(R.id.btnC).setOnLongClickListener(v -> {
+            clearAll();
+            performHapticFeedback();
+            showToast("All cleared");
+            return true;
+        });
 
-        // Long press display to copy result
-        if (tvDisplay != null) {
-            tvDisplay.setOnLongClickListener(v -> {
-                copyToClipboard(currentInput);
-                performHapticFeedback();
-                return true;
-            });
-        }
-
-        // Long press equals for repeat last operation
-        View btnEquals = findViewById(R.id.btnEquals);
-        if (btnEquals != null) {
-            btnEquals.setOnLongClickListener(v -> {
-                repeatLastOperation();
-                performHapticFeedback();
-                return true;
-            });
-        }
+        tvDisplay.setOnLongClickListener(v -> {
+            copyToClipboard(currentInput);
+            performHapticFeedback();
+            showToast("Copied to clipboard");
+            return true;
+        });
     }
 
-    // 3. Added the missing copyToClipboard method
-    private void copyToClipboard(String text) {
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("CalculatorResult", text);
-        if (clipboard != null) {
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(this, "Copied to clipboard", Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("memory_value", Double.doubleToLongBits(memoryValue));
+        editor.putBoolean("has_memory", hasMemory);
+        editor.apply();
     }
-
-    // 4. Added the missing repeatLastOperation method
-    private void repeatLastOperation() {
-        if (!lastOperation.isEmpty() && !lastOperandForRepeat.isEmpty()) {
-            firstOperand = currentInput;
-            currentInput = lastOperandForRepeat;
-            operator = lastOperation;
-            isNewInput = false;
-            equalsPressed();
-        }
-    }
-
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
         performHapticFeedback();
         animateButtonPress(v);
+
+        int id = v.getId();
 
         if (id == R.id.btn0) numberPressed("0");
         else if (id == R.id.btn1) numberPressed("1");
@@ -191,12 +122,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (id == R.id.btnMultiply) operatorPressed("*");
         else if (id == R.id.btnDivide) operatorPressed("/");
         else if (id == R.id.btnEquals) equalsPressed();
-        else if (id == R.id.btnAC) clearAll(); // Using the correct ID from layout
+        else if (id == R.id.btnC) clearAll();
+        else if (id == R.id.btnCE) clearEntry();
         else if (id == R.id.btnPlusMinus) plusMinusPressed();
         else if (id == R.id.btnPercent) percentPressed();
-        // Removed handlers for non-existent buttons
+        else if (id == R.id.btnSquare) squarePressed();
+        else if (id == R.id.btnSqrt) sqrtPressed();
+        else if (id == R.id.btnOneOverX) oneOverXPressed();
+        else if (id == R.id.btnMC) memoryClear();
+        else if (id == R.id.btnMR) memoryRecall();
+        else if (id == R.id.btnMPlus) memoryAdd();
+        else if (id == R.id.btnMMinus) memorySubtract();
+        else if (id == R.id.btnMS) memoryStore();
+        else if (id == R.id.btnMTilde) memoryToggle();
 
         updateDisplay();
+        updateMemoryIndicator();
+    }
+
+    private void performHapticFeedback() {
+        try {
+            if (vibrator != null && vibrator.hasVibrator()) {
+                vibrator.vibrate(10);
+            }
+        } catch (Exception ignored) {}
+    }
+
+    private void animateButtonPress(View button) {
+        ObjectAnimator scaleDown = ObjectAnimator.ofFloat(button, "scaleX", 1f, 0.95f);
+        scaleDown.setDuration(50);
+        scaleDown.setInterpolator(new DecelerateInterpolator());
+        scaleDown.start();
+
+        ObjectAnimator scaleUp = ObjectAnimator.ofFloat(button, "scaleX", 0.95f, 1f);
+        scaleUp.setDuration(50);
+        scaleUp.setStartDelay(50);
+        scaleUp.start();
+
+        ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(button, "scaleY", 1f, 0.95f);
+        scaleDownY.setDuration(50);
+        scaleDownY.start();
+
+        ObjectAnimator scaleUpY = ObjectAnimator.ofFloat(button, "scaleY", 0.95f, 1f);
+        scaleUpY.setDuration(50);
+        scaleUpY.setStartDelay(50);
+        scaleUpY.start();
     }
 
     private void numberPressed(String number) {
@@ -204,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currentInput = number;
             isNewInput = false;
             isResultDisplayed = false;
+            isDecimalAdded = false;
         } else {
             if (currentInput.length() < 15) {
                 currentInput += number;
@@ -217,112 +188,94 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             isNewInput = false;
             isResultDisplayed = false;
             isDecimalAdded = true;
-        } else if (!isDecimalAdded) {
+        } else if (!isDecimalAdded && !currentInput.contains(".")) {
             currentInput += ".";
             isDecimalAdded = true;
         }
     }
 
     private void operatorPressed(String op) {
-        if (!operator.isEmpty() && !isNewInput) {
+        if (!operator.isEmpty() && !isNewInput && !isResultDisplayed) {
             calculate();
         }
+
+        updateHistory(currentInput + " " + getOperatorSymbol(op));
         firstOperand = currentInput;
         operator = op;
         lastOperation = op;
+        lastOperand = currentInput;
         isNewInput = true;
+        isResultDisplayed = false;
         isDecimalAdded = false;
-        tvHistory.setText(firstOperand + " " + getOperatorSymbol(op));
     }
 
     private void equalsPressed() {
         if (!operator.isEmpty() && !isNewInput) {
-            lastOperandForRepeat = currentInput; // Store for repeat operation
-            String fullExpression = firstOperand + " " + getOperatorSymbol(operator) + " " + currentInput;
+            String expression = firstOperand + " " + getOperatorSymbol(operator) + " " + currentInput;
+            lastOperand = currentInput;
             calculate();
-            tvHistory.setText(fullExpression + " =");
+            updateHistory(expression + " =");
             operator = "";
+            firstOperand = "";
+            isNewInput = true;
             isResultDisplayed = true;
+            isDecimalAdded = false;
         }
     }
 
     private void calculate() {
-        if (firstOperand.isEmpty() || operator.isEmpty()) return;
         try {
             BigDecimal first = new BigDecimal(firstOperand);
             BigDecimal second = new BigDecimal(currentInput);
-            BigDecimal result = BigDecimal.ZERO;
+            BigDecimal result;
 
             switch (operator) {
-                case "+": result = first.add(second, mathContext); break;
-                case "-": result = first.subtract(second, mathContext); break;
-                case "*": result = first.multiply(second, mathContext); break;
+                case "+":
+                    result = first.add(second, mathContext);
+                    break;
+                case "-":
+                    result = first.subtract(second, mathContext);
+                    break;
+                case "*":
+                    result = first.multiply(second, mathContext);
+                    break;
                 case "/":
-                    if (second.compareTo(BigDecimal.ZERO) == 0) {
+                    if (second.compareTo(BigDecimal.ZERO) != 0) {
+                        result = first.divide(second, mathContext);
+                    } else {
                         currentInput = "Error";
-                        updateDisplay();
+                        showToast("Cannot divide by zero");
                         return;
                     }
-                    result = first.divide(second, mathContext);
                     break;
+                default:
+                    return;
             }
             currentInput = formatResult(result);
         } catch (Exception e) {
             currentInput = "Error";
         }
-        isNewInput = true;
-        isDecimalAdded = false;
-    }
-
-    // 5. Completed the percentPressed method and the rest of the file
-    private void percentPressed() {
-        if (firstOperand.isEmpty()) {
-            // Simple percentage
-            BigDecimal value = new BigDecimal(currentInput);
-            currentInput = formatResult(value.divide(new BigDecimal(100), mathContext));
-        } else {
-            // Percentage of the first operand
-            BigDecimal first = new BigDecimal(firstOperand);
-            BigDecimal second = new BigDecimal(currentInput);
-            BigDecimal percentValue = first.multiply(second, mathContext).divide(new BigDecimal(100), mathContext);
-            currentInput = formatResult(percentValue);
-        }
-        isResultDisplayed = true;
-        updateDisplay();
-    }
-
-    private void clearAll() {
-        currentInput = "0";
-        firstOperand = "";
-        operator = "";
-        lastOperation = "";
-        lastOperandForRepeat = "";
-        isNewInput = true;
-        isResultDisplayed = false;
-        isDecimalAdded = false;
-        tvHistory.setText("");
-    }
-
-    private void plusMinusPressed() {
-        if (!currentInput.equals("0") && !currentInput.equals("Error")) {
-            if (currentInput.startsWith("-")) {
-                currentInput = currentInput.substring(1);
-            } else {
-                currentInput = "-" + currentInput;
-            }
-        }
-    }
-
-    private void updateDisplay() {
-        tvDisplay.setText(currentInput);
     }
 
     private String formatResult(BigDecimal result) {
-        String plainString = result.stripTrailingZeros().toPlainString();
-        if (plainString.length() > 15) {
-            return scientificFormatter.format(result);
+        double doubleResult = result.doubleValue();
+
+        if (Double.isInfinite(doubleResult) || Double.isNaN(doubleResult)) {
+            return "Error";
         }
-        return plainString;
+
+        if (Math.abs(doubleResult) >= 1e12 || (Math.abs(doubleResult) < 1e-6 && doubleResult != 0)) {
+            return scientificFormatter.format(doubleResult);
+        }
+
+        result = result.stripTrailingZeros();
+        String formatted = result.toPlainString();
+
+        if (formatted.contains(".") && formatted.length() > 15) {
+            formatted = formatted.substring(0, 15);
+        }
+
+        return formatted;
     }
 
     private String getOperatorSymbol(String op) {
@@ -335,17 +288,171 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void performHapticFeedback() {
-        View view = findViewById(android.R.id.content);
-        if (view != null) {
-            view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+    private void updateHistory(String entry) {
+        if (tvHistory != null) {
+            tvHistory.setText(entry);
         }
     }
 
-    private void animateButtonPress(View button) {
-        if (button == null) return;
-        button.animate().scaleX(0.9f).scaleY(0.9f).setDuration(50).withEndAction(() -> {
-            button.animate().scaleX(1f).scaleY(1f).setDuration(50).start();
-        }).start();
+    private void clearAll() {
+        currentInput = "0";
+        firstOperand = "";
+        operator = "";
+        isNewInput = true;
+        isResultDisplayed = false;
+        isDecimalAdded = false;
+        if (tvHistory != null) tvHistory.setText("");
+    }
+
+    private void clearEntry() {
+        currentInput = "0";
+        isNewInput = true;
+        isResultDisplayed = false;
+        isDecimalAdded = false;
+    }
+
+    private void plusMinusPressed() {
+        if (!currentInput.equals("0") && !currentInput.equals("Error")) {
+            if (currentInput.startsWith("-")) {
+                currentInput = currentInput.substring(1);
+            } else {
+                currentInput = "-" + currentInput;
+            }
+        }
+    }
+
+    private void percentPressed() {
+        try {
+            BigDecimal value = new BigDecimal(currentInput);
+            BigDecimal result = value.divide(new BigDecimal("100"), mathContext);
+            currentInput = formatResult(result);
+            isNewInput = true;
+            isResultDisplayed = true;
+        } catch (Exception e) {
+            currentInput = "Error";
+        }
+    }
+
+    private void squarePressed() {
+        try {
+            BigDecimal value = new BigDecimal(currentInput);
+            BigDecimal result = value.multiply(value, mathContext);
+            updateHistory(currentInput + "²");
+            currentInput = formatResult(result);
+            isNewInput = true;
+            isResultDisplayed = true;
+        } catch (Exception e) {
+            currentInput = "Error";
+        }
+    }
+
+    private void sqrtPressed() {
+        try {
+            BigDecimal value = new BigDecimal(currentInput);
+            if (value.compareTo(BigDecimal.ZERO) >= 0) {
+                double result = Math.sqrt(value.doubleValue());
+                updateHistory("√(" + currentInput + ")");
+                currentInput = formatResult(new BigDecimal(result));
+            } else {
+                currentInput = "Error";
+                showToast("Invalid input");
+            }
+            isNewInput = true;
+            isResultDisplayed = true;
+        } catch (Exception e) {
+            currentInput = "Error";
+        }
+    }
+
+    private void oneOverXPressed() {
+        try {
+            BigDecimal value = new BigDecimal(currentInput);
+            if (value.compareTo(BigDecimal.ZERO) != 0) {
+                BigDecimal result = BigDecimal.ONE.divide(value, mathContext);
+                updateHistory("1/(" + currentInput + ")");
+                currentInput = formatResult(result);
+            } else {
+                currentInput = "Error";
+                showToast("Cannot divide by zero");
+            }
+            isNewInput = true;
+            isResultDisplayed = true;
+        } catch (Exception e) {
+            currentInput = "Error";
+        }
+    }
+
+    private void memoryClear() {
+        memoryValue = 0.0;
+        hasMemory = false;
+        showToast("Memory cleared");
+    }
+
+    private void memoryRecall() {
+        if (hasMemory) {
+            currentInput = formatResult(new BigDecimal(memoryValue));
+            isNewInput = true;
+            isResultDisplayed = true;
+        }
+    }
+
+    private void memoryStore() {
+        try {
+            memoryValue = Double.parseDouble(currentInput);
+            hasMemory = true;
+            showToast("Stored");
+        } catch (Exception ignored) {}
+    }
+
+    private void memoryAdd() {
+        try {
+            memoryValue += Double.parseDouble(currentInput);
+            hasMemory = true;
+            showToast("Added to memory");
+        } catch (Exception ignored) {}
+    }
+
+    private void memorySubtract() {
+        try {
+            memoryValue -= Double.parseDouble(currentInput);
+            hasMemory = true;
+            showToast("Subtracted");
+        } catch (Exception ignored) {}
+    }
+
+    private void memoryToggle() {
+        if (hasMemory) {
+            memoryValue = -memoryValue;
+            currentInput = formatResult(new BigDecimal(memoryValue));
+            isNewInput = true;
+            isResultDisplayed = true;
+        }
+    }
+
+    private void updateMemoryIndicator() {
+        if (tvMemoryIndicator != null) {
+            if (hasMemory && memoryValue != 0.0) {
+                tvMemoryIndicator.setText("M");
+                tvMemoryIndicator.setVisibility(View.VISIBLE);
+            } else {
+                tvMemoryIndicator.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private void copyToClipboard(String text) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("result", text);
+        clipboard.setPrimaryClip(clip);
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateDisplay() {
+        if (tvDisplay != null) {
+            tvDisplay.setText(currentInput);
+        }
     }
 }

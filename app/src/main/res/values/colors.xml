@@ -12,7 +12,6 @@
     <!-- Calculator Theme Colors -->
     <color name="calculator_primary">#1976D2</color>
     <color name="calculator_primary_dark">#1565C0</color>
-    <color name="calculator_primary_light">#BBDEFB</color>
     <color name="calculator_accent">#FF4081</color>
     <color name="calculator_background">#F8F9FA</color>
 
@@ -36,14 +35,4 @@
 
     <!-- Display Colors -->
     <color name="display_background">#FFFFFF</color>
-    <color name="display_shadow">#E0E0E0</color>
-
-    <!-- Icon Colors -->
-    <color name="icon_color">#757575</color>
-    <color name="icon_active">#1976D2</color>
-
-    <!-- Status Colors -->
-    <color name="success_color">#4CAF50</color>
-    <color name="error_color">#F44336</color>
-    <color name="warning_color">#FF9800</color>
 </resources>
