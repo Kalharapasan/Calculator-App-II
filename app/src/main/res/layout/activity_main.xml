@@ -6,13 +6,145 @@
     android:orientation="vertical"
     android:background="@drawable/main_background"
     android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginBottom="8dp">
+
+        <ImageButton
+            android:id="@+id/btnHistory"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/menu_button_background"
+            android:src="@drawable/ic_history"
+            android:contentDescription="History"
+            android:layout_marginEnd="8dp" />
+
+        <ImageButton
+            android:id="@+id/btnSettings"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/menu_button_background"
+            android:src="@drawable/ic_settings"
+            android:contentDescription="Settings" />
+
+    </LinearLayout>
+
+    <!-- Display Container with Enhanced Design -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:layout_marginBottom="16dp"
+        android:elevation="8dp"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@color/display_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Settings Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <!-- Memory Indicator -->
+                <TextView
+                    android:id="@+id/tvMemoryIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/calculator_primary"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    android:background="@drawable/memory_indicator_background"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <!-- Decimal/Angle Mode Indicators -->
+                <TextView
+                    android:id="@+id/tvModeIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEG"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <!-- Secondary Display for Previous Results -->
+            <TextView
+                android:id="@+id/tvSecondaryDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:gravity="end|center_vertical"
+                android:text=""
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:fontFamily="monospace"
+                android:maxLines="1"
+                android:ellipsize="start"
+                android:alpha="0.7" />
+
+            <!-- History/Expression Display -->
+            <TextView
+                android:id="@+id/tvHistory"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="end|center_vertical"
+                android:text=""
+                android:textColor="@color/text_secondary"
+                android:textSize="18sp"
+                android:fontFamily="monospace"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Main Display with Better Typography -->
+            <TextView
+                android:id="@+id/tvDisplay"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="end|center_vertical"
+                android:text="0"
+                android:textColor="@color/text_primary"
+                android:textSize="48sp"
+                android:fontFamily="monospace"
+                android:maxLines="1"
+                android:ellipsize="start"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
         android:columnCount="4"
         android:rowCount="8">
+
         
+
     </GridLayout>
 
     </LinearLayout>
