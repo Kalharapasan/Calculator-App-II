@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean hasMemory = false;
     private String lastOperation = "";
     private String lastOperand = "";
+
+    // NEW: Calculation history
+    private List<String> calculationHistory = new ArrayList<>();
+    private int historyPosition = -1;
 
     private MathContext mathContext = new MathContext(15, RoundingMode.HALF_UP);
     private DecimalFormat scientificFormatter = new DecimalFormat("0.#####E0");
@@ -49,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         preferences = getSharedPreferences("CalculatorPrefs", MODE_PRIVATE);
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-        memoryValue = Double.longBitsToDouble(preferences.getLong("memory_value", 0));
-        hasMemory = preferences.getBoolean("has_memory", false);
+        // NEW: Load saved state
+        loadState();
 
         initializeButtons();
         updateDisplay();
@@ -75,28 +81,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void addLongClickListeners() {
+        // Long press C to clear all including history
         findViewById(R.id.btnC).setOnLongClickListener(v -> {
             clearAll();
+            calculationHistory.clear();
+            historyPosition = -1;
             performHapticFeedback();
-            showToast("All cleared");
+            showToast("Everything cleared");
             return true;
         });
 
+        // Long press display to copy
         tvDisplay.setOnLongClickListener(v -> {
             copyToClipboard(currentInput);
             performHapticFeedback();
-            showToast("Copied to clipboard");
+            showToast("Copied: " + currentInput);
+            return true;
+        });
+
+        // NEW: Long press equals to repeat last calculation
+        findViewById(R.id.btnEquals).setOnLongClickListener(v -> {
+            repeatLastCalculation();
+            return true;
+        });
+
+        // NEW: Long press history to cycle through history
+        tvHistory.setOnLongClickListener(v -> {
+            showPreviousCalculation();
+            return true;
+        });
+
+        // NEW: Long press memory recall to show memory value
+        findViewById(R.id.btnMR).setOnLongClickListener(v -> {
+            if (hasMemory) {
+                showToast("Memory: " + formatResult(new BigDecimal(memoryValue)));
+            } else {
+                showToast("Memory is empty");
+            }
             return true;
         });
     }
 
+    // NEW: Save state when app is paused
     @Override
     protected void onPause() {
         super.onPause();
+        saveState();
+    }
+
+    // NEW: Save calculator state
+    private void saveState() {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putLong("memory_value", Double.doubleToLongBits(memoryValue));
         editor.putBoolean("has_memory", hasMemory);
+        editor.putString("last_display", currentInput);
+        editor.putString("last_operator", operator);
+        editor.putString("first_operand", firstOperand);
+        editor.putBoolean("is_new_input", isNewInput);
         editor.apply();
+    }
+
+    // NEW: Load calculator state
+    private void loadState() {
+        memoryValue = Double.longBitsToDouble(preferences.getLong("memory_value", 0));
+        hasMemory = preferences.getBoolean("has_memory", false);
+        currentInput = preferences.getString("last_display", "0");
+        operator = preferences.getString("last_operator", "");
+        firstOperand = preferences.getString("first_operand", "");
+        isNewInput = preferences.getBoolean("is_new_input", true);
     }
 
     @Override
@@ -178,6 +230,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             if (currentInput.length() < 15) {
                 currentInput += number;
+            } else {
+                showToast("Maximum 15 digits");
             }
         }
     }
@@ -214,6 +268,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String expression = firstOperand + " " + getOperatorSymbol(operator) + " " + currentInput;
             lastOperand = currentInput;
             calculate();
+
+            // NEW: Add to calculation history
+            String historyEntry = expression + " = " + currentInput;
+            calculationHistory.add(historyEntry);
+            if (calculationHistory.size() > 20) {
+                calculationHistory.remove(0);
+            }
+            historyPosition = calculationHistory.size() - 1;
+
             updateHistory(expression + " =");
             operator = "";
             firstOperand = "";
@@ -245,6 +308,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } else {
                         currentInput = "Error";
                         showToast("Cannot divide by zero");
+                        performErrorVibration();
                         return;
                     }
                     break;
@@ -254,7 +318,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currentInput = formatResult(result);
         } catch (Exception e) {
             currentInput = "Error";
+            performErrorVibration();
         }
+    }
+
+    // NEW: Different vibration pattern for errors
+    private void performErrorVibration() {
+        try {
+            if (vibrator != null && vibrator.hasVibrator()) {
+                vibrator.vibrate(new long[]{0, 100, 50, 100}, -1);
+            }
+        } catch (Exception ignored) {}
     }
 
     private String formatResult(BigDecimal result) {
@@ -298,6 +372,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         currentInput = "0";
         firstOperand = "";
         operator = "";
+        lastOperation = "";
+        lastOperand = "";
         isNewInput = true;
         isResultDisplayed = false;
         isDecimalAdded = false;
@@ -318,6 +394,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 currentInput = "-" + currentInput;
             }
+            isResultDisplayed = false;
         }
     }
 
@@ -355,7 +432,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 currentInput = formatResult(new BigDecimal(result));
             } else {
                 currentInput = "Error";
-                showToast("Invalid input");
+                showToast("Cannot calculate √ of negative number");
+                performErrorVibration();
             }
             isNewInput = true;
             isResultDisplayed = true;
@@ -374,6 +452,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 currentInput = "Error";
                 showToast("Cannot divide by zero");
+                performErrorVibration();
             }
             isNewInput = true;
             isResultDisplayed = true;
@@ -393,6 +472,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currentInput = formatResult(new BigDecimal(memoryValue));
             isNewInput = true;
             isResultDisplayed = true;
+            showToast("Memory recalled");
+        } else {
+            showToast("Memory is empty");
         }
     }
 
@@ -400,8 +482,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             memoryValue = Double.parseDouble(currentInput);
             hasMemory = true;
-            showToast("Stored");
-        } catch (Exception ignored) {}
+            showToast("Stored in memory");
+        } catch (Exception e) {
+            showToast("Cannot store");
+        }
     }
 
     private void memoryAdd() {
@@ -416,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             memoryValue -= Double.parseDouble(currentInput);
             hasMemory = true;
-            showToast("Subtracted");
+            showToast("Subtracted from memory");
         } catch (Exception ignored) {}
     }
 
@@ -426,6 +510,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             currentInput = formatResult(new BigDecimal(memoryValue));
             isNewInput = true;
             isResultDisplayed = true;
+            showToast("Memory sign toggled");
+        } else {
+            showToast("Memory is empty");
         }
     }
 
@@ -437,6 +524,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 tvMemoryIndicator.setVisibility(View.GONE);
             }
+        }
+    }
+
+    // NEW: Repeat last calculation
+    private void repeatLastCalculation() {
+        if (!lastOperation.isEmpty() && !lastOperand.isEmpty()) {
+            firstOperand = currentInput;
+            currentInput = lastOperand;
+            operator = lastOperation;
+            equalsPressed();
+            showToast("Repeated last calculation");
+        } else {
+            showToast("No previous calculation");
+        }
+    }
+
+    // NEW: Show previous calculation from history
+    private void showPreviousCalculation() {
+        if (!calculationHistory.isEmpty()) {
+            historyPosition = (historyPosition - 1 + calculationHistory.size()) % calculationHistory.size();
+            String history = calculationHistory.get(historyPosition);
+            updateHistory(history);
+            showToast("History " + (historyPosition + 1) + "/" + calculationHistory.size());
+        } else {
+            showToast("No calculation history");
         }
     }
 
@@ -452,7 +564,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void updateDisplay() {
         if (tvDisplay != null) {
-            tvDisplay.setText(currentInput);
+            String displayText = currentInput;
+
+            // NEW: Add thousand separators for better readability
+            if (!displayText.contains("E") && !displayText.equals("Error") && !displayText.contains(".")) {
+                try {
+                    long number = Long.parseLong(displayText);
+                    if (Math.abs(number) > 999) {
+                        displayText = String.format("%,d", number);
+                    }
+                } catch (NumberFormatException ignored) {}
+            }
+
+            tvDisplay.setText(displayText);
         }
     }
 }
