@@ -65,11 +65,8 @@ Calculator app II/
 
 ## 📸 Screenshots
 
-_Add your app screenshots here:_
-```
-/screenshots/screenshot1.png
-/screenshots/screenshot2.png
-```
+<img width="1366" height="739" alt="Captureww" src="https://github.com/user-attachments/assets/2a834d4b-aafe-4f00-8b53-ace8ac974821" />
+
 
 ---
 
