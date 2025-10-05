@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Material Design Colors -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -8,33 +9,41 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Calculator specific colors -->
+    <!-- Calculator Theme Colors -->
     <color name="calculator_primary">#1976D2</color>
     <color name="calculator_primary_dark">#1565C0</color>
+    <color name="calculator_primary_light">#BBDEFB</color>
     <color name="calculator_accent">#FF4081</color>
-    <color name="calculator_background">#F5F5F5</color>
+    <color name="calculator_background">#F8F9FA</color>
 
-    <!-- Button background colors -->
+    <!-- Button Colors -->
     <color name="button_number">#FFFFFF</color>
-    <color name="button_operator">#F5F5F5</color>
-    <color name="button_function">#F0F0F0</color>
-    <color name="button_memory">#FAFAFA</color>
+    <color name="button_operator">#E3F2FD</color>
+    <color name="button_function">#F3E5F5</color>
+    <color name="button_memory">#E8F5E8</color>
     <color name="button_equals">#1976D2</color>
     <color name="button_clear">#FFEBEE</color>
 
-    <!-- Text colors -->
-    <color name="text_primary">#000000</color>
-    <color name="text_secondary">#666666</color>
-    <color name="text_tertiary">#999999</color>
-    <color name="text_number">#000000</color>
-    <color name="text_operator">#333333</color>
-    <color name="text_function">#333333</color>
-    <color name="text_memory">#666666</color>
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_tertiary">#BDBDBD</color>
+    <color name="text_number">#1A237E</color>
+    <color name="text_operator">#1976D2</color>
+    <color name="text_function">#7B1FA2</color>
+    <color name="text_memory">#388E3C</color>
     <color name="text_clear">#D32F2F</color>
 
-    <!-- Display colors -->
+    <!-- Display Colors -->
     <color name="display_background">#FFFFFF</color>
+    <color name="display_shadow">#E0E0E0</color>
 
-    <!-- Icon colors -->
-    <color name="icon_color">#666666</color>
+    <!-- Icon Colors -->
+    <color name="icon_color">#757575</color>
+    <color name="icon_active">#1976D2</color>
+
+    <!-- Status Colors -->
+    <color name="success_color">#4CAF50</color>
+    <color name="error_color">#F44336</color>
+    <color name="warning_color">#FF9800</color>
 </resources>

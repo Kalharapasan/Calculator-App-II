@@ -1,5 +1,5 @@
-// 1. Corrected the package name to match the file path
 package com.example.calculatorappii;
+
 
 import android.animation.ObjectAnimator;
 import android.content.ClipData;
@@ -15,6 +15,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.calculator.R;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;

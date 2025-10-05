@@ -2,4 +2,5 @@
 <resources>
     <item name="btnCE" type="id" />
     <item name="btnC" type="id" />
+    <item name="btnAC" type="id" />
 </resources>
