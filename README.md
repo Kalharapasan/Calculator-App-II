@@ -39,6 +39,8 @@ Calculator app II/
 ├── build.gradle.kts
 ├── settings.gradle.kts
 └── README.md
+└──LICENSE.md
+
 ```
 
 ---
